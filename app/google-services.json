@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "154264470455",
+    "firebase_url": "https://kwizz-app-4126f.firebaseio.com",
+    "project_id": "kwizz-app-4126f",
+    "storage_bucket": "kwizz-app-4126f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:154264470455:android:d0b131f675401327",
+        "android_client_info": {
+          "package_name": "ml.medyas.kwizzapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "154264470455-8viv07t2sqg9gtshmoq8o506qf7na7d2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ml.medyas.kwizzapp",
+            "certificate_hash": "fa21e49b45a691658f00b130a54c695e86bc27e6"
+          }
+        },
+        {
+          "client_id": "154264470455-bk98o1i8hlv7djtptab49dfmfve7a499.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqMnVLK8xxmd2D_f4zI3JMOATBYAVKVeI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "154264470455-bk98o1i8hlv7djtptab49dfmfve7a499.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

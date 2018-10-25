@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3d4460</color>
+    <color name="colorPrimaryDark">#141d36</color>
+    <color name="colorAccent">#01cae4</color>
+    <color name="accentLight">#00dfd5</color>
+    <color name="primaryLight">#3a3d44</color>
+    <color name="primaryCenter">#3b4151</color>
+    <color name="secondaryColor">#6d748e</color>
+
+    <color name="textLight">#9092a0</color>
+    <color name="inputHintColor">#a4a6af</color>
+    <color name="inputBackgroundTint">#4b5160</color>
+</resources>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">kwizz App</string>
+
+    <string name="api_url">https://opentdb.com/api.php</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="log_in">Log In</string>
+    <string name="or">Or</string>
+    <string name="create_an_account">Create an Account</string>
+
+    <string name="forgor_pass">&lt;u>Forgot Password?&lt;/u></string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="reg_continue">Register to continue</string>
+    <string name="email">Email</string>
+    <string name="pass_confirm">Confirm password</string>
+</resources>
