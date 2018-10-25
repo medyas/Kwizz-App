@@ -33,6 +33,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:9.0.0-rc1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:9.0.0-rc1'
 
+    implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.firebase:firebase-auth:16.0.5'
 
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'

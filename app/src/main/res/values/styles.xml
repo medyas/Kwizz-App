@@ -36,4 +36,30 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="MenuItemImageStyle">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_marginStart">24dp</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:background">@drawable/image_button_background</item>
+        <item name="android:tint">@color/colorPrimary</item>
+    </style>
+
+    <style name="MenuItemTextStyle">
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:layout_marginStart">18dp</item>
+        <item name="android:layout_marginLeft">18dp</item>
+        <item name="android:textColor">#faf9f7</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MenuButtonStyle">
+        <item name="android:drawableTint">@color/textLight</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/textLight</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
 </resources>

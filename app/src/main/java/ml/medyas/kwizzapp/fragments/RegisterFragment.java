@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
 
+import static ml.medyas.kwizzapp.activities.LoginActivity.TAG;
 import static ml.medyas.kwizzapp.classes.UtilsClass.isValidEmail;
 
 public class RegisterFragment extends Fragment {
@@ -80,7 +82,8 @@ public class RegisterFragment extends Fragment {
             password.setError("Password should be more then 5 characters!");
             valid = false;
         }
-        if (!password.getText().equals(confirm.getText())) {
+        if (!password.getText().toString().equals(confirm.getText().toString())) {
+            Log.d(TAG, password.getText()+ ""+ confirm.getText());
             confirm.setError("Both passwords must match!");
             valid = false;
         }

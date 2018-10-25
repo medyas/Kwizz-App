@@ -1,21 +1,18 @@
 package ml.medyas.kwizzapp.activities;
 
 import android.content.Intent;
-import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -35,7 +32,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
     @BindView(R.id.login_progress) ProgressBar progressBar;
     @BindView(R.id.login_container) FrameLayout container;
 
-    private final String TAG = getClass().getName();
+    public static final String TAG = "LoginActivity";
 
     private FirebaseAuth mAuth;
 

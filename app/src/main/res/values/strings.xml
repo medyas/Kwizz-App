@@ -16,4 +16,10 @@
     <string name="reg_continue">Register to continue</string>
     <string name="email">Email</string>
     <string name="pass_confirm">Confirm password</string>
+    <string name="quizzes">Quizzes</string>
+    <string name="leaderboard">LeaderBoard</string>
+    <string name="notifications">Notifications</string>
+    <string name="earn_coins">Earn Coins</string>
+    <string name="settings">Settings</string>
+    <string name="log_out">Log Out</string>
 </resources>
