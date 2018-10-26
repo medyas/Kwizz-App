@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -47,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
     private FirebaseUser user;
     private final String TAG = getClass().getName();
 
+    // hide keybord, minimize the btn size / margins or paddings / change input text color / text size  finish
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
         fixMinDrawerMargin(drawerLayout);
 
         if(savedInstanceState == null) {
-            replaceFragment(new QuizFragment());
+            replaceFragment(new QuizFragment(), getString(R.string.quizzes));
         }
         userLetter.setText(user.getDisplayName().substring(0, 1).toUpperCase());
         userName.setText(String.format("%s%s", user.getDisplayName().substring(0, 1).toUpperCase(), user.getDisplayName().substring(1)));
@@ -81,25 +82,50 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
         drawerLayout.closeDrawers();
     }
 
-    @OnClick({R.id.menu_item_quiz, R.id.menu_item_leaderboard, R.id.menu_item_notification, R.id.menu_item_earn_coins})
+    @OnClick({R.id.menu_item_quiz, R.id.menu_item_leaderboard, R.id.menu_item_notification, R.id.menu_item_earn_coins, R.id.menu_item_logout, R.id.menu_item_settings})
     public void onMenuItemClicked(LinearLayout layout) {
         int id = layout.getId();
+        Fragment frag;
         switch (id) {
             case R.id.menu_item_quiz:
-                getSupportActionBar().setTitle(getString(R.string.quizzes));
-                replaceFragment(new QuizFragment());
+                frag = getSupportFragmentManager().findFragmentByTag(getString(R.string.quizzes));
+                if(!(frag != null && frag.isVisible())) {
+                    getSupportActionBar().setTitle(getString(R.string.quizzes));
+                    replaceFragment(new QuizFragment(), getString(R.string.quizzes));
+                }
                 break;
             case R.id.menu_item_leaderboard:
-                getSupportActionBar().setTitle(getString(R.string.leaderboard));
-                replaceFragment(new LeaderBoardFragment());
+                frag = getSupportFragmentManager().findFragmentByTag(getString(R.string.leaderboard));
+                if(!(frag != null && frag.isVisible())) {
+                    getSupportActionBar().setTitle(getString(R.string.leaderboard));
+                    replaceFragment(new LeaderBoardFragment(), getString(R.string.leaderboard));
+                }
                 break;
             case R.id.menu_item_notification:
-                getSupportActionBar().setTitle(getString(R.string.notifications));
-                replaceFragment(new NotificationsFragment());
+                frag = getSupportFragmentManager().findFragmentByTag(getString(R.string.notifications));
+                if(!(frag != null && frag.isVisible())) {
+                    getSupportActionBar().setTitle(getString(R.string.notifications));
+                    replaceFragment(new NotificationsFragment(), getString(R.string.notifications));
+                }
                 break;
             case R.id.menu_item_earn_coins:
-                getSupportActionBar().setTitle(getString(R.string.earn_coins));
-                replaceFragment(new EarnCoinsFragment());
+                frag = getSupportFragmentManager().findFragmentByTag(getString(R.string.earn_coins));
+                if(!(frag != null && frag.isVisible())) {
+                    getSupportActionBar().setTitle(getString(R.string.earn_coins));
+                    replaceFragment(new EarnCoinsFragment(), getString(R.string.earn_coins));
+                }
+                break;
+            case R.id.menu_item_settings:
+                frag = getSupportFragmentManager().findFragmentByTag(getString(R.string.settings));
+                if(!(frag != null && frag.isVisible())) {
+                    getSupportActionBar().setTitle(getString(R.string.settings));
+                    replaceFragment(new SettingsFragment(), getString(R.string.settings));
+                }
+                break;
+            case R.id.menu_item_logout:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(this, LoginActivity.class));
+                finishAffinity();
                 break;
         }
 
@@ -108,24 +134,15 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
 
     }
 
-    @OnClick({R.id.menu_item_logout, R.id.menu_item_settings})
-    public void onItemClicked(Button btn) {
-        int id = btn.getId();
-        if(id == R.id.menu_item_settings) {
-            getSupportActionBar().setTitle(getString(R.string.settings));
-            replaceFragment(new SettingsFragment());
-            drawerLayout.closeDrawers();
-
-        } else if(id == R.id.menu_item_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
+    public void replaceFragment(Fragment frag, String key) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, frag, key)
+                .commit();
     }
 
-    public void replaceFragment(Fragment frag) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_container, frag)
-                .commit();
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     public void setItemSelected(int itemId) {
@@ -161,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             // FirebaseUser.getIdToken() instead.
         } else {
             startActivity(new Intent(this, LoginActivity.class));
+            finishAffinity();
         }
     }
 

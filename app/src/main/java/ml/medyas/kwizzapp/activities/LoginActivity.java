@@ -26,6 +26,8 @@ import ml.medyas.kwizzapp.fragments.LoginFragment;
 import ml.medyas.kwizzapp.fragments.RegisterFragment;
 import ml.medyas.kwizzapp.fragments.SplashFragment;
 
+import static ml.medyas.kwizzapp.classes.UtilsClass.hideKeyboard;
+
 public class LoginActivity extends AppCompatActivity implements SplashFragment.SplashFragmentInterface,
         LoginFragment.LoginFragmentInterface, RegisterFragment.RegisterFragmentInterface,
         ForgotPasswordFragment.ForgotPasswordFragmentInterface {
@@ -64,9 +66,15 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
         updateUI(currentUser);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finishAffinity();
         }
     }
 
@@ -91,6 +99,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
 
     @Override
     public void onLoginUser(String email, String password) {
+        hideKeyboard(this);
         showProgressBar();
 
         mAuth.signInWithEmailAndPassword(email, password)
@@ -120,6 +129,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
 
     @Override
     public void onCreateNewAccount(final String username, String email, String password, String confirm) {
+        hideKeyboard(this);
         showProgressBar();
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -164,6 +174,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
 
     @Override
     public void onResetPassword(String email) {
+        hideKeyboard(this);
         showProgressBar();
         mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {

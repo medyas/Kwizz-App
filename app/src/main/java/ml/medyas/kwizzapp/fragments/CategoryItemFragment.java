@@ -13,12 +13,12 @@ import ml.medyas.kwizzapp.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CategoryListFragment.OnFragmentInteractionListener} interface
+ * {@link CategoryItemFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CategoryListFragment#newInstance} factory method to
+ * Use the {@link CategoryItemFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CategoryListFragment extends Fragment {
+public class CategoryItemFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -30,7 +30,7 @@ public class CategoryListFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public CategoryListFragment() {
+    public CategoryItemFragment() {
         // Required empty public constructor
     }
 
@@ -43,8 +43,8 @@ public class CategoryListFragment extends Fragment {
      * @return A new instance of fragment CategoryListFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CategoryListFragment newInstance(String param1, String param2) {
-        CategoryListFragment fragment = new CategoryListFragment();
+    public static CategoryItemFragment newInstance(String param1, String param2) {
+        CategoryItemFragment fragment = new CategoryItemFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);

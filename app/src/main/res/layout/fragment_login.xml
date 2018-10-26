@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/login_email"
-            android:inputType="text"
+            android:inputType="textEmailAddress"
             android:backgroundTint="@color/inputBackgroundTint"
             android:maxLines="1" />
     </android.support.design.widget.TextInputLayout>

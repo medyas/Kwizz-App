@@ -4,11 +4,18 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.classes.OpentDBCalls;
+import ml.medyas.kwizzapp.classes.OpentDBClass;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QuizFragment extends Fragment {
 
@@ -28,7 +35,22 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz, container, false);
+        View root = inflater.inflate(R.layout.fragment_quiz, container, false);
+        ButterKnife.bind(this, root);
+
+        new OpentDBCalls().getQuestion(10, 9, "multiple").enqueue(new Callback<OpentDBClass>() {
+            @Override
+            public void onResponse(Call<OpentDBClass> call, Response<OpentDBClass> response) {
+                Log.d("QuizFragment", response.body().getResults().get(0).getQuestion());
+            }
+
+            @Override
+            public void onFailure(Call<OpentDBClass> call, Throwable t) {
+
+            }
+        });
+
+        return root;
     }
 
 
