@@ -168,9 +168,9 @@ public class QuizQuestionFragment extends Fragment {
             String answer = getRadioButton(quizGroup.getCheckedRadioButtonId()).getText().toString();
             c = answer.equals(quiz.getCorrect_answer());
             if (c) {
-                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackgroundColor(getResources().getColor(R.color.validGreen));
+                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_valid));
             } else {
-                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackgroundColor(getResources().getColor(R.color.invalidRed));
+                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_invalid));
                 determineCorrectAnswer();
             }
         } else {
@@ -190,7 +190,7 @@ public class QuizQuestionFragment extends Fragment {
     private void determineCorrectAnswer() {
         for(RadioButton btn: btns) {
             if (btn.getText().toString().equals(quiz.getCorrect_answer())) {
-                btn.setBackgroundColor(getResources().getColor(R.color.validGreen));
+                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_valid));
                 break;
             }
         }

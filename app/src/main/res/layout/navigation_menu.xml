@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent" >
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
