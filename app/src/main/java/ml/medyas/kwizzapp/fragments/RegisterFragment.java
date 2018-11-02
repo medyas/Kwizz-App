@@ -72,27 +72,39 @@ public class RegisterFragment extends Fragment {
         if (TextUtils.isEmpty(username.getText())) {
             username.setError("Provide a username!");
             valid = false;
+        } else{
+            username.setError(null);
         }
         if (username.getText().length() <= 5) {
             username.setError("Username should be more then 5 characters!");
             valid = false;
+        } else{
+            username.setError(null);
         }
         if (!isValidEmail(email.getText())) {
             email.setError("Provide a valid email address!");
             valid = false;
+        } else{
+            email.setError(null);
         }
         if (TextUtils.isEmpty(password.getText())) {
             password.setError("Password should not be empty!");
             valid = false;
+        } else{
+            password.setError(null);
         }
         if (password.getText().length() <= 5) {
             password.setError("Password should be more then 5 characters!");
             valid = false;
+        } else{
+            password.setError(null);
         }
         if (!password.getText().toString().equals(confirm.getText().toString())) {
             Log.d(TAG, password.getText()+ ""+ confirm.getText());
             confirm.setError("Both passwords must match!");
             valid = false;
+        } else{
+            confirm.setError(null);
         }
         return valid;
     }

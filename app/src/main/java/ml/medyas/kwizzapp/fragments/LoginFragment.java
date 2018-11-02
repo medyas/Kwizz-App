@@ -87,14 +87,20 @@ public class LoginFragment extends Fragment {
         if (!isValidEmail(email.getText())) {
             email.setError("Provide a valid email address!");
             valid = false;
+        } else{
+            email.setError(null);
         }
         if (TextUtils.isEmpty(password.getText())) {
             password.setError("Password should not be empty!");
             valid = false;
+        } else{
+            password.setError(null);
         }
         if (password.getText().length() <= 5) {
             password.setError("A minimum of characters is required for your password!");
             valid = false;
+        } else{
+            password.setError(null);
         }
         return valid;
     }
