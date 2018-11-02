@@ -11,4 +11,7 @@
     <color name="textLight">#9092a0</color>
     <color name="inputHintColor">#a4a6af</color>
     <color name="inputBackgroundTint">#4b5160</color>
+
+    <color name="invalidRed">#ba000d</color>
+    <color name="validGreen">#299800</color>
 </resources>

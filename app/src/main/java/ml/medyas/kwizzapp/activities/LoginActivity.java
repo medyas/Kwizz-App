@@ -17,10 +17,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.classes.UserCoins;
 import ml.medyas.kwizzapp.fragments.ForgotPasswordFragment;
 import ml.medyas.kwizzapp.fragments.LoginFragment;
 import ml.medyas.kwizzapp.fragments.RegisterFragment;
@@ -37,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
     public static final String TAG = "LoginActivity";
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +50,10 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
         //FirebaseApp.initializeApp(LoginActivity.this);
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         if(savedInstanceState == null) {
-            replaceFragment(new SplashFragment());
+            replaceFragment(new LoginFragment());
         }
     }
 
@@ -66,10 +71,6 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
         updateUI(currentUser);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     private void updateUI(FirebaseUser currentUser) {
         if (currentUser != null) {
@@ -149,12 +150,13 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Log.d(TAG, "User profile updated.");
-                                                updateUI(user);
+                                                writeNewUser(user.getUid(), user);
                                             } else {
                                                 // If sign in fails, display a message to the user.
                                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                                                 Toast.makeText(LoginActivity.this, "Authentication failed.",
                                                         Toast.LENGTH_SHORT).show();
+                                                FirebaseAuth.getInstance().signOut();
                                                 updateUI(null);
                                                 hideProgressBar();
                                             }
@@ -170,6 +172,25 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                         }
                     }
                 });
+    }
+
+    private void writeNewUser(String userId, final FirebaseUser user) {
+        UserCoins u = new UserCoins(userId, 250);
+        mDatabase.child("usersCoins").child(userId).setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    updateUI(user);
+                } else {
+                    Log.d(TAG, "Error, "+task.getException().getMessage());
+                    Toast.makeText(LoginActivity.this, "Authentication failed.",
+                            Toast.LENGTH_SHORT).show();
+                    FirebaseAuth.getInstance().signOut();
+                    updateUI(null);
+                    hideProgressBar();
+                }
+            }
+        });
     }
 
     @Override

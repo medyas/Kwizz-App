@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +27,8 @@ public class LoginFragment extends Fragment {
     @BindView(R.id.button_login) Button login;
     @BindView(R.id.login_email) EditText email;
     @BindView(R.id.login_password) EditText password;
+    @BindView(R.id.button_spalsh_create_account) Button createAccount;
+    @BindView(R.id.login_app_logo) ImageView logo;
 
     private LoginFragmentInterface mListener;
 
@@ -46,6 +51,10 @@ public class LoginFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_login, container, false);
         ButterKnife.bind(this, root);
 
+        Glide.with(this)
+                .load(R.drawable.app_logo)
+                .into(logo);
+
         forgotPass.setText(Html.fromHtml(getString(R.string.forgor_pass)));
         forgotPass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,6 +69,13 @@ public class LoginFragment extends Fragment {
                 if(validateInputs()) {
                     mListener.onLoginUser(email.getText().toString(), password.getText().toString());
                 }
+            }
+        });
+
+        createAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onCreateAccount();
             }
         });
 
@@ -112,8 +128,9 @@ public class LoginFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface LoginFragmentInterface {
-        // TODO: Update argument type and name
+
         void onLoginUser(String email, String password);
         void onForgotPassword();
+        void onCreateAccount();
     }
 }

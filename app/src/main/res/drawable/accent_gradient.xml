@@ -3,6 +3,7 @@
 
     <gradient android:startColor="@color/colorAccent"
         android:endColor="@color/accentLight"
-        android:angle="90"/>
+        android:angle="0"/>
+    <corners android:radius="36dp"/>
 
 </shape>

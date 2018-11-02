@@ -6,9 +6,23 @@ import retrofit2.http.Query;
 
 public interface OpentDBService {
 
-    //Get Currency Exchange rates
     @GET("api.php")
-    Call<OpentDBClass> getLatestExchangeRates(@Query("amount") int amount,
-                                              @Query("category") int category,
-                                              @Query("type") String type);
+    Call<OpentDBClass> getQuizAll(@Query("amount") String amount,
+                                  @Query("category") String category,
+                                  @Query("difficulty") String difficulty,
+                                  @Query("type") String type);
+
+    @GET("api.php")
+    Call<OpentDBClass> getQuizCategory(@Query("amount") String amount,
+                               @Query("category") String category,
+                               @Query("type") String type);
+
+    @GET("api.php")
+    Call<OpentDBClass> getQuizDiff(@Query("amount") String amount,
+                                   @Query("difficulty") String difficulty,
+                                   @Query("type") String type);
+
+    @GET("api.php")
+    Call<OpentDBClass> getQuiz(@Query("amount") String amount,
+                                   @Query("type") String type);
 }

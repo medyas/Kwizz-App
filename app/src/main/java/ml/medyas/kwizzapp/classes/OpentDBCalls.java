@@ -15,8 +15,23 @@ public class OpentDBCalls {
     }
 
 
-    public Call<OpentDBClass> getQuestion(int amount, int category, String type) {
+    public Call<OpentDBClass> getQuestion(String amount, String type) {
         return builder(OPEN_DB_URL).create(OpentDBService.class).
-                getLatestExchangeRates(amount, category, type);
+                getQuiz(amount, type);
+    }
+
+    public Call<OpentDBClass> getQuestionAll(String amount, String category, String difficulty, String type) {
+        return builder(OPEN_DB_URL).create(OpentDBService.class).
+                getQuizAll(amount, category, difficulty,  type);
+    }
+
+    public Call<OpentDBClass> getQuestionByCategory(String amount, String category, String type) {
+        return builder(OPEN_DB_URL).create(OpentDBService.class).
+                getQuizCategory(amount, category,  type);
+    }
+
+    public Call<OpentDBClass> getQuestionByDiff(String amount, String difficulty, String type) {
+        return builder(OPEN_DB_URL).create(OpentDBService.class).
+                getQuizDiff(amount, difficulty,  type);
     }
 }

@@ -3,21 +3,23 @@ package ml.medyas.kwizzapp.fragments;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
-import ml.medyas.kwizzapp.classes.OpentDBCalls;
-import ml.medyas.kwizzapp.classes.OpentDBClass;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import ml.medyas.kwizzapp.adapter.CategoryAdapter;
+
+import static ml.medyas.kwizzapp.classes.UtilsClass.dp2px;
 
 public class QuizFragment extends Fragment {
+    @BindView(R.id.view_pager) ViewPager viewPager;
+    private int pagerPosition = 0;
 
     private OnFragmentInteractionListener mListener;
 
@@ -38,21 +40,25 @@ public class QuizFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_quiz, container, false);
         ButterKnife.bind(this, root);
 
-        new OpentDBCalls().getQuestion(10, 9, "multiple").enqueue(new Callback<OpentDBClass>() {
-            @Override
-            public void onResponse(Call<OpentDBClass> call, Response<OpentDBClass> response) {
-                Log.d("QuizFragment", response.body().getResults().get(0).getQuestion());
-            }
+        if (savedInstanceState != null) {
+            pagerPosition = savedInstanceState.getInt("pagerPosition");
+        }
 
-            @Override
-            public void onFailure(Call<OpentDBClass> call, Throwable t) {
-
-            }
-        });
+        viewPager.setAdapter(new CategoryAdapter(getChildFragmentManager()));
+        viewPager.setClipToPadding(false);
+        viewPager.setPageMargin(dp2px(getResources(), 40));
+        viewPager.setPadding(48, 8, 48, 8);
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.setCurrentItem(pagerPosition, true);
 
         return root;
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("pagerPosition", viewPager.getCurrentItem());
+    }
 
     @Override
     public void onAttach(Context context) {

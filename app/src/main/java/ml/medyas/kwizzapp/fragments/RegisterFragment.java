@@ -24,6 +24,7 @@ public class RegisterFragment extends Fragment {
     @BindView(R.id.register_email) EditText email;
     @BindView(R.id.register_password) EditText password;
     @BindView(R.id.register_pass_confirm) EditText confirm;
+    @BindView(R.id.button_splash_login) Button login;
 
     private RegisterFragmentInterface mListener;
 
@@ -54,6 +55,12 @@ public class RegisterFragment extends Fragment {
                             password.getText().toString(),
                             confirm.getText().toString());
                 }
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onLogIn();
             }
         });
 
@@ -119,6 +126,8 @@ public class RegisterFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface RegisterFragmentInterface {
+
         void onCreateNewAccount(String username, String email, String password, String confirm);
+        void onLogIn();
     }
 }
