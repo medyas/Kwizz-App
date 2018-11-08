@@ -13,8 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/content_loading"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="64dp"
         android:orientation="vertical"
         android:layout_gravity="center">
 
@@ -40,8 +38,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="64dp"
         android:id="@+id/content_failed"
         android:visibility="gone"
         android:padding="16dp"
@@ -52,7 +48,7 @@
             android:layout_height="120dp"
             android:layout_gravity="center"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_sentiment_dissatisfied_black_24dp"/>
+            android:background="@drawable/ic_sentiment_dissatisfied_black_24dp"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -67,15 +63,16 @@
         android:id="@+id/content_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_marginBottom="64dp"
         android:visibility="gone"
         android:layout_gravity="center"
         android:text="Start Quiz"
         android:textAllCaps="false"
         style="@style/ButtonStyle"
         android:background="@drawable/accent_gradient"
-        android:textColor="@android:color/white"/>
-
+        android:textColor="@android:color/white"
+        android:layout_marginRight="@dimen/quiz_question_bottombar_width"
+        android:layout_marginEnd="@dimen/quiz_question_bottombar_width"
+        android:layout_marginLeft="@dimen/quiz_question_bottombar_width"
+        android:layout_marginStart="@dimen/quiz_question_bottombar_width" />
 
 </FrameLayout>

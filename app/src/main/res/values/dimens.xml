@@ -5,4 +5,8 @@
     <dimen name="nav_menu_divider">60dp</dimen>
     <dimen name="viewpager_height">500dp</dimen>
     <dimen name="category_img_height">300dp</dimen>
+    <dimen name="quiz_question_bottombar_width">56dp</dimen>
+    <dimen name="quiz_question_counter_width">100dp</dimen>
+    <dimen name="quiz_question_radioButton_margin">8dp</dimen>
+    <dimen name="progress_text_size">22sp</dimen>
 </resources>

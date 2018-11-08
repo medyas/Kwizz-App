@@ -2,6 +2,7 @@ package ml.medyas.kwizzapp.activities;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -15,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -190,7 +193,6 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
         if(questionPosition < questionsList.size()) {
             quitDialog().show();
         } else {
-            updateUserCoins();
             super.onBackPressed();
         }
     }
@@ -203,7 +205,19 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
             public void onClick(DialogInterface dialog, int id) {
                 dialog.dismiss();
                 questionPosition = questionsList.size();
-                onBackPressed();
+                UserCoins u = new UserCoins(user.getUid(), (userCoins.getUserCoins()+coinsCount));
+                mDatabase.setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(QuizzesActivity.this, "Data saved.", Toast.LENGTH_LONG).show();
+                            onBackPressed();
+                        } else {
+                            Toast.makeText(QuizzesActivity.this, "Could not save you data!", Toast.LENGTH_LONG).show();
+                            onBackPressed();
+                        }
+                    }
+                });
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -243,13 +257,20 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
         if (correct) {
             coinsCount++;
         }
-        if(questionPosition < questionsList.size()) {
-            replaceFragment();
-        } else {
-            Toast.makeText(this, "Completed the Quiz", Toast.LENGTH_SHORT).show();
-            updateUserCoins();
-            onBackPressed();
-        }
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(questionPosition < questionsList.size()) {
+                    replaceFragment();
+                } else {
+                    Toast.makeText(QuizzesActivity.this, "Completed the Quiz", Toast.LENGTH_SHORT).show();
+                    updateUserCoins();
+                    onBackPressed();
+                }
+            }
+        }, 2000);
+
     }
 
     private void updateUserCoins() {

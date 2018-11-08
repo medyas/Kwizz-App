@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
                 finishAffinity();
                 Toast.makeText(this, "Please verify you email address!", Toast.LENGTH_SHORT).show();
             }
-            if(!user.getPhotoUrl().equals("")) {
+            if(user.getPhotoUrl() != null && !user.getPhotoUrl().equals("")) {
                 userImage.setVisibility(View.VISIBLE);
                 userLetter.setVisibility(View.GONE);
                 Glide.with(this)

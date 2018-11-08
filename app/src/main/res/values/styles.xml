@@ -73,7 +73,21 @@
         <item name="android:textAlignment">center</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:layout_marginLeft">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginTop">@dimen/quiz_question_radioButton_margin</item>
+    </style>
+
+    <style name="SettingsFragmentTitle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">#93969b</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_regular</item>
+    </style>
+
+    <style name="SettingsFragmentItemIcon">
+        <item name="android:layout_gravity">center</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/settings_icon_background</item>
+        <item name="android:tint"> @color/settings_icon</item>
     </style>
 
 </resources>

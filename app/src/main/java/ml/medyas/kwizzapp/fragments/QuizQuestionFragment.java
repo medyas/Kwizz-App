@@ -4,21 +4,24 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.text.Html;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -32,7 +35,7 @@ import ml.medyas.kwizzapp.classes.QuestionClass;
 public class QuizQuestionFragment extends Fragment {
     @BindView(R.id.txtProgress) TextView txtProgress;
     @BindView(R.id.progressBar) ProgressBar progressBar;
-    @BindView(R.id.progress_layout) RelativeLayout progressLayout;
+    @BindView(R.id.progress_layout) FrameLayout progressLayout;
     @BindView(R.id.quiz_report) ImageView report;
     @BindView(R.id.quiz_fav) ImageView fav;
     @BindView(R.id.quiz_question) TextView quizQuestion;
@@ -68,6 +71,27 @@ public class QuizQuestionFragment extends Fragment {
             counterPosition = savedInstanceState.getLong("counterPosition");
             quizTime = counterPosition;
         }
+
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        if ((int) getResources().getDimension(R.dimen.progress_text_size) == 28) {
+            inflater.inflate(R.menu.quiz_question_menu, menu);
+        }
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.quiz_send) {
+            if(counter != null) {
+                counter.cancel();
+                processAnswer();
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -122,18 +146,24 @@ public class QuizQuestionFragment extends Fragment {
             }
         }.start();
 
-        progressLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(counter != null) counter.cancel();
-                processAnswer();
-            }
-        });
-
         quizGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
                 onButtonClicked(getRadioButton(radioGroup.getCheckedRadioButtonId()));
+                processAnswer();
+            }
+        });
+
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity().getApplicationContext(), "Added to Favorite ", Toast.LENGTH_SHORT).show();
+            }
+        });
+        report.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity().getApplicationContext(), "Question reported !", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -161,36 +191,35 @@ public class QuizQuestionFragment extends Fragment {
     }
 
     public void processAnswer() {
-        progressLayout.setOnClickListener(null);
+        if(counter != null) counter.cancel();
+        txtProgress.setText(String.format("%d", 0));
+        progressBar.setProgress(0);
         quizGroup.setEnabled(false);
-        boolean c;
+        boolean correct;
         if(getRadioButton(quizGroup.getCheckedRadioButtonId()) != null) {
             String answer = getRadioButton(quizGroup.getCheckedRadioButtonId()).getText().toString();
-            c = answer.equals(quiz.getCorrect_answer());
-            if (c) {
+            correct = answer.equals(quiz.getCorrect_answer());
+            if (correct) {
+                getRadioButton(quizGroup.getCheckedRadioButtonId()).setTextColor(getResources().getColor(android.R.color.white));
                 getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_valid));
             } else {
+                getRadioButton(quizGroup.getCheckedRadioButtonId()).setTextColor(getResources().getColor(android.R.color.white));
                 getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_invalid));
                 determineCorrectAnswer();
             }
         } else {
-            c = false;
+            correct = false;
             determineCorrectAnswer();
         }
-        final boolean correct = c;
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mListener.onFinished(correct);
-            }
-        }, 3000);
+        mListener.onFinished(correct);
+
     }
 
     private void determineCorrectAnswer() {
         for(RadioButton btn: btns) {
             if (btn.getText().toString().equals(quiz.getCorrect_answer())) {
-                getRadioButton(quizGroup.getCheckedRadioButtonId()).setBackground(getResources().getDrawable(R.drawable.button_valid));
+                btn.setTextColor(getResources().getColor(android.R.color.white));
+                btn.setBackground(getResources().getDrawable(R.drawable.button_valid));
                 break;
             }
         }

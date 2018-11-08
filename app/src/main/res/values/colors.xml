@@ -14,4 +14,5 @@
 
     <color name="invalidRed">#ba000d</color>
     <color name="validGreen">#299800</color>
+    <color name="settings_icon">#a5a6aa</color>
 </resources>
