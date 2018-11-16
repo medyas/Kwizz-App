@@ -1,17 +1,24 @@
 package ml.medyas.kwizzapp.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,16 +26,21 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.classes.SimpleIdlingResource;
+import ml.medyas.kwizzapp.classes.UserCategories;
 import ml.medyas.kwizzapp.classes.UserCoins;
 import ml.medyas.kwizzapp.fragments.ForgotPasswordFragment;
 import ml.medyas.kwizzapp.fragments.LoginFragment;
 import ml.medyas.kwizzapp.fragments.RegisterFragment;
 import ml.medyas.kwizzapp.fragments.SplashFragment;
 
+import static ml.medyas.kwizzapp.classes.UtilsClass.getDefaultCategories;
 import static ml.medyas.kwizzapp.classes.UtilsClass.hideKeyboard;
 
 public class LoginActivity extends AppCompatActivity implements SplashFragment.SplashFragmentInterface,
@@ -41,6 +53,16 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
+    private FirebaseFirestore db;
+
+    @Nullable
+    private SimpleIdlingResource mIdlingResource  = null;
+    public SimpleIdlingResource getIdlingResource() {
+        if(mIdlingResource == null) {
+            mIdlingResource = new SimpleIdlingResource();
+        }
+        return mIdlingResource;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +73,21 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        db = FirebaseFirestore.getInstance();
+
+        if (getIdlingResource() != null) {
+            getIdlingResource().setIdleState(true);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            // finally change the color
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.primaryLight));
+        }
 
         if(savedInstanceState == null) {
             replaceFragment(new LoginFragment());
@@ -103,6 +140,8 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
         hideKeyboard(this);
         showProgressBar();
 
+        mIdlingResource.setIdleState(false);
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -119,6 +158,8 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                             hideProgressBar();
                         }
 
+                        mIdlingResource.setIdleState(true);
+
                     }
                 });
     }
@@ -132,6 +173,8 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
     public void onCreateNewAccount(final String username, String email, String password, String confirm) {
         hideKeyboard(this);
         showProgressBar();
+
+        mIdlingResource.setIdleState(false);
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -150,7 +193,7 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()) {
                                                 Log.d(TAG, "User profile updated.");
-                                                writeNewUser(user.getUid(), user);
+                                                createUserCategories(user.getUid(), user);
                                             } else {
                                                 // If sign in fails, display a message to the user.
                                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -174,6 +217,25 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                 });
     }
 
+    private void createUserCategories(final String uid, final FirebaseUser user) {
+        UserCategories userCategories = new UserCategories(uid, getDefaultCategories());
+        db.collection("users")
+                .add(userCategories)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d(TAG, "DocumentSnapshot written with ID: " + documentReference.getId());
+                        writeNewUser(uid, user);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error adding document", e);
+                    }
+                });
+    }
+
     private void writeNewUser(String userId, final FirebaseUser user) {
         UserCoins u = new UserCoins(userId, 250);
         mDatabase.child("usersCoins").child(userId).setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -189,6 +251,8 @@ public class LoginActivity extends AppCompatActivity implements SplashFragment.S
                     updateUI(null);
                     hideProgressBar();
                 }
+
+                mIdlingResource.setIdleState(true);
             }
         });
     }

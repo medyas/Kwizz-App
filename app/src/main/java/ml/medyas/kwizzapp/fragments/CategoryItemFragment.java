@@ -18,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.classes.Categories;
 import ml.medyas.kwizzapp.classes.CategoryItemClass;
 
 import static ml.medyas.kwizzapp.activities.MainActivity.categoryList;
@@ -30,6 +31,7 @@ public class CategoryItemFragment extends Fragment {
     @BindView(R.id.category_title) TextView categoryTitle;
 
     private int position = 0;
+    private Categories categories;
 
     private CategoryItemInterface mListener;
 
@@ -43,6 +45,7 @@ public class CategoryItemFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
             position = getArguments().getInt("position");
+            categories = getArguments().getParcelable("category");
         }
     }
 
@@ -63,10 +66,13 @@ public class CategoryItemFragment extends Fragment {
                 .into(categoryImage);
         categoryTitle.setText(categoryItemClass.getName());
 
+        if(categories.getStatus().equals("unlocked")) {
+            categoryBtnTitle.setText("Start Quiz");
+        }
         categoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onCategoryItemButtonClicked(position);
+                mListener.onCategoryItemButtonClicked(position, categories);
             }
         });
 
@@ -102,6 +108,6 @@ public class CategoryItemFragment extends Fragment {
      */
     public interface CategoryItemInterface {
 
-        void onCategoryItemButtonClicked(int position);
+        void onCategoryItemButtonClicked(int position, Categories categories);
     }
 }

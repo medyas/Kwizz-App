@@ -1,13 +1,27 @@
 package ml.medyas.kwizzapp;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
+import android.support.test.espresso.IdlingPolicies;
+import android.support.test.espresso.IdlingRegistry;
+import android.support.test.espresso.IdlingResource;
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
+import android.text.format.DateUtils;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.junit.Assert.*;
+import java.util.concurrent.TimeUnit;
+
+import ml.medyas.kwizzapp.activities.LoginActivity;
+
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.action.ViewActions.click;
+import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static android.support.test.espresso.action.ViewActions.typeText;
+import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -16,11 +30,53 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+
+
+    @Rule
+    public ActivityTestRule<LoginActivity> mActivityRule
+            = new ActivityTestRule<>(LoginActivity.class);
+
+
+
+    private IdlingResource mIdlingResource;
+
+    @Before
+    public void registerIdlingResource() {
+        mIdlingResource = mActivityRule.getActivity().getIdlingResource();
+        // Make sure Espresso does not time out
+        IdlingPolicies.setMasterPolicyTimeout(DateUtils.SECOND_IN_MILLIS * 75 * 2, TimeUnit.MILLISECONDS);
+        IdlingPolicies.setIdlingResourceTimeout(DateUtils.SECOND_IN_MILLIS * 75 * 2, TimeUnit.MILLISECONDS);
+
+        // Now we wait
+        IdlingRegistry.getInstance().register(mIdlingResource);
+
+    }
+
+
     @Test
     public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ml.medyas.kwizzapp", appContext.getPackageName());
+        onView(withId(R.id.button_spalsh_create_account)).perform(click());
+
+        onView(withId(R.id.register_username)).perform(typeText("medyas"), closeSoftKeyboard());
+        onView(withId(R.id.register_email)).perform(typeText("medyassinesabri@gmail.com"), closeSoftKeyboard());
+        onView(withId(R.id.register_password)).perform(typeText("50532193"), closeSoftKeyboard());
+        onView(withId(R.id.register_pass_confirm)).perform(typeText("50532193"), closeSoftKeyboard());
+
+        onView(withId(R.id.button_register)).perform(click());
+
+/*
+        onView(withId(R.id.login_email)).perform(typeText("medyas"), closeSoftKeyboard());
+        onView(withId(R.id.login_password)).perform(typeText("50532193"), closeSoftKeyboard());
+
+        onView(withId(R.id.button_login)).perform(click());
+
+        intended(hasComponent(MainActivity.class.getName()));*/
     }
+
+    @After
+    public void unregisterIdlingResources() {
+        IdlingRegistry.getInstance().unregister(mIdlingResource);
+    }
+
 }

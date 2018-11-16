@@ -21,6 +21,8 @@
     <string name="settings">Settings</string>
     <string name="log_out">Log Out</string>
     <string name="send">Send</string>
+    <string name="upload">Upload</string>
+    <string name="change">Change</string>
 
 
 </resources>

@@ -11,18 +11,18 @@
         style="@style/SettingsFragmentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:paddingLeft="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Account" />
+        android:text="Account" />
 
     <LinearLayout
         android:id="@+id/settings_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:background="@drawable/settings_item_background"
         android:orientation="horizontal"
         android:padding="20dp"
@@ -55,14 +55,14 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                tools:text="Update Email Address" />
+                android:text="Update Email Address" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/settings_icon"
-                tools:text="medyassinesabri@gmail.com" />
+                android:id="@+id/settings_email_text" />
 
         </LinearLayout>
 
@@ -80,7 +80,7 @@
         android:id="@+id/settings_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:background="@drawable/settings_item_background"
         android:orientation="horizontal"
         android:padding="20dp"
@@ -113,14 +113,14 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                tools:text="Change Password" />
+                android:text="Change Password" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/settings_icon"
-                tools:text="Last changed 2 weeks ago" />
+                android:text="Last changed 2 weeks ago" />
 
         </LinearLayout>
 
@@ -138,7 +138,7 @@
         android:id="@+id/settings_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:background="@drawable/settings_item_background"
         android:orientation="horizontal"
         android:padding="20dp"
@@ -171,15 +171,16 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                tools:text="Update You Profile Pic" />
+                android:text="Update You Profile Pic" />
 
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/settings_pic_text"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/settings_icon"
-                tools:text="No pic found" />
+                android:text="No pic found" />
 
         </LinearLayout>
 
@@ -190,7 +191,6 @@
             android:layout_weight="1"
             android:src="@drawable/ic_navigate_next_black_24dp"
             android:tint="@color/settings_icon" />
-
     </LinearLayout>
 
     <TextView
@@ -198,18 +198,18 @@
         style="@style/SettingsFragmentTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:paddingLeft="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/settings_profile"
-        tools:text="Other" />
+        android:text="Other"/>
 
     <LinearLayout
         android:id="@+id/settings_notify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="12dp"
         android:background="@drawable/settings_item_background"
         android:orientation="horizontal"
         android:padding="20dp"
@@ -242,14 +242,14 @@
                 android:fontFamily="@font/roboto_regular"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                tools:text="Push Notifications" />
+                android:text="Push Notifications" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:textColor="@color/settings_icon"
-                tools:text="For messages, badges etc" />
+                android:text="For messages, badges etc" />
 
         </LinearLayout>
 
@@ -263,19 +263,25 @@
 
     </LinearLayout>
 
-    <TextView
+    <Button
+        android:id="@+id/settings_logout"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_marginTop="36dp"
+        android:textAllCaps="false"
         android:background="@color/secondaryColor"
         android:fontFamily="@font/roboto_regular"
-        android:textStyle="bold"
         android:gravity="center"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        tools:text="Log Out" />
+        app:layout_constraintTop_toBottomOf="@+id/settings_notify"
+        app:layout_constraintVertical_bias="1.0"
+        android:text="Log Out" />
 
 </android.support.constraint.ConstraintLayout>

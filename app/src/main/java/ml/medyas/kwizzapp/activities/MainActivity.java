@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +18,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -24,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,25 +43,24 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.classes.Categories;
 import ml.medyas.kwizzapp.classes.CategoryItemClass;
 import ml.medyas.kwizzapp.classes.UserCoins;
+import ml.medyas.kwizzapp.classes.UserSingleton;
 import ml.medyas.kwizzapp.fragments.CategoryItemFragment;
 import ml.medyas.kwizzapp.fragments.EarnCoinsFragment;
 import ml.medyas.kwizzapp.fragments.LeaderBoardFragment;
 import ml.medyas.kwizzapp.fragments.NotificationsFragment;
+import ml.medyas.kwizzapp.fragments.ProfileSettingsFragment;
 import ml.medyas.kwizzapp.fragments.QuizFragment;
 import ml.medyas.kwizzapp.fragments.SettingsFragment;
 
@@ -61,8 +68,8 @@ import static ml.medyas.kwizzapp.classes.UtilsClass.fixMinDrawerMargin;
 import static ml.medyas.kwizzapp.classes.UtilsClass.getCategories;
 
 public class MainActivity extends AppCompatActivity implements QuizFragment.OnFragmentInteractionListener, LeaderBoardFragment.OnFragmentInteractionListener,
-        NotificationsFragment.OnFragmentInteractionListener, EarnCoinsFragment.OnFragmentInteractionListener, SettingsFragment.OnFragmentInteractionListener,
-        CategoryItemFragment.CategoryItemInterface {
+        NotificationsFragment.OnFragmentInteractionListener, EarnCoinsFragment.OnFragmentInteractionListener, SettingsFragment.OnSettingsFragmentsInteractions,
+        CategoryItemFragment.CategoryItemInterface, ProfileSettingsFragment.OnProfileSettingsFragmentInteractions {
     public static final String CATEGORY_POSITION = "categoryPosition";
     public static final String QUESTION_DIFF = "questionDiff";
     public static final String QUESTION_NUM = "questionNum";
@@ -74,10 +81,12 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
     @BindView(R.id.user_coins) TextView userCoins;
     @BindView(R.id.user_img) ImageView userImage;
 
-    private int[] menuItems = {R.id.menu_item_quiz, R.id.menu_item_leaderboard, R.id.menu_item_notification, R.id.menu_item_earn_coins};
+    private int[] menuItems = {R.id.menu_item_quiz, R.id.menu_item_leaderboard, R.id.menu_item_notification, R.id.menu_item_earn_coins, R.id.menu_item_settings};
 
     private FirebaseUser user;
     private DatabaseReference mDatabase;
+    private Boolean hiddenToolbar = false;
+    private UserCoins coins;
     private FirebaseFirestore db;
 
     private final String TAG = getClass().getName();
@@ -89,12 +98,13 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        UserSingleton.setUser(user);
         db = FirebaseFirestore.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference("usersCoins").child(user.getUid());
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                UserCoins coins = dataSnapshot.getValue(UserCoins.class);
+                coins = dataSnapshot.getValue(UserCoins.class);
                 userCoins.setText(String.format("%d Coins", coins.getUserCoins()));
             }
 
@@ -104,53 +114,42 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             }
         });
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = this.getWindow();
+            // clear FLAG_TRANSLUCENT_STATUS flag:
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            // finally change the color
+            window.setStatusBarColor(ContextCompat.getColor(this,R.color.primaryLight));
+        }
 
         fixMinDrawerMargin(drawerLayout);
 
         categoryList.addAll(getCategories());
 
-        if(savedInstanceState == null) {
-            replaceFragment(new QuizFragment(), getString(R.string.quizzes));
-        }
-        userLetter.setText(user.getDisplayName().substring(0, 1).toUpperCase());
-        userName.setText(String.format("%s%s", user.getDisplayName().substring(0, 1).toUpperCase(), user.getDisplayName().substring(1)));
-        //userCoins.setText("2,5846 Coins");
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getString(R.string.quizzes));
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_noun_menu_220342);
-        drawerLayout.setFitsSystemWindows(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                drawerLayout.openDrawer(Gravity.START);
-            }
-        });
-        // NavUtils.navigateUpFromSameTask(this);
+        if(savedInstanceState == null) {
+            replaceFragment(new QuizFragment(), getString(R.string.quizzes));
+        } else {
+            hiddenToolbar = savedInstanceState.getBoolean("toolbarHidden");
+        }
+        setUpToolbar(hiddenToolbar);
+        if(savedInstanceState == null) {
+            getSupportActionBar().setTitle(getString(R.string.quizzes));
+        }
+
+        userLetter.setText(user.getDisplayName().substring(0, 1).toUpperCase());
+        userName.setText(String.format("%s%s", user.getDisplayName().substring(0, 1).toUpperCase(), user.getDisplayName().substring(1)));
     }
 
-    public void buyCategories() {
-        Map<String, Object> u = new HashMap<>();
-        u.put("userId", user.getUid());
-        u.put("categories", Arrays.asList(""));
-
-        // Add a new document with a generated ID
-        db.collection("users")
-                .add(u)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
-                    }
-                });
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("toolbarHidden", hiddenToolbar);
     }
+
 
     @OnClick(R.id.menu_close)
     public void onMenuClose() {
@@ -248,9 +247,10 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             }
             if(user.getPhotoUrl() != null && !user.getPhotoUrl().equals("")) {
                 userImage.setVisibility(View.VISIBLE);
-                userLetter.setVisibility(View.GONE);
+                userLetter.setVisibility(View.INVISIBLE);
                 Glide.with(this)
                         .load(user.getPhotoUrl())
+                        .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(40)))
                         .into(userImage);
             }
 
@@ -264,12 +264,55 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
 
     @Override
-    public void onCategoryItemButtonClicked(final int position) {
+    public void onCategoryItemButtonClicked(final int position, final Categories categories) {
+        if(UserSingleton.getUserCategories().getCategories().get(position).getStatus().equals("unlocked")) {
+            showQuizDialog(position);
+        } else {
+            if(coins.getUserCoins() >= 250) {
+                UserSingleton.getUserCategories().getCategories().get(position).setStatus("unlocked");
+                // implement loading dialog
+                UserCoins u = new UserCoins(user.getUid(), (coins.getUserCoins()-250));
+                mDatabase.setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            db.collection("users").document(UserSingleton.getUserDoc())
+                                    .update("categories", UserSingleton.getUserCategories().getCategories())
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                            showQuizDialog(position);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.w(TAG, "Error updating document", e);
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(MainActivity.this, "Unexpected Error", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            } else {
+                Toast.makeText(this, "You don\'t have sufficient coins!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    private void showQuizDialog(final int position) {
         final AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -317,5 +360,56 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             }
         });
         alertDialog.show();
+    }
+
+
+    public void setUpToolbar(Boolean hide) {
+        hiddenToolbar = hide;
+        if (hide) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
+            getSupportActionBar().setTitle("Profile Settings");
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onFragmentBackPressed();
+                    setUpToolbar(false);
+                }
+            });
+        } else {
+            getSupportActionBar().setTitle(getString(R.string.settings));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_noun_menu_220342);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    drawerLayout.openDrawer(Gravity.START);
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onAddSettingsFragment(Fragment frag) {
+        setUpToolbar(true);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, frag, ProfileSettingsFragment.TAG)
+                .addToBackStack(ProfileSettingsFragment.TAG)
+                .commit();
+    }
+
+    @Override
+    public void onFragmentBackPressed() {
+        setUpToolbar(false);
+        getSupportFragmentManager().popBackStack(ProfileSettingsFragment.TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+    }
+
+    @Override
+    public void onProfilePictureUpdate(Uri uri) {
+        Glide.with(this)
+                .load(uri)
+                .apply(new RequestOptions().transforms(new CenterCrop(), new RoundedCorners(40)))
+                .into(userImage);
     }
 }

@@ -25,8 +25,8 @@
 
         <TextView
             android:id="@+id/user_letter"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:background="@drawable/profile_text_background"
@@ -38,10 +38,10 @@
             app:layout_constraintTop_toBottomOf="@+id/menu_close" />
 
         <ImageView
-            android:id="@+id/user_img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
             android:visibility="gone"
+            android:id="@+id/user_img"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
             android:layout_marginStart="32dp"
             android:layout_marginLeft="32dp"
             android:background="@drawable/profile_text_background"
@@ -178,14 +178,15 @@
             android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="1px"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginBottom="8dp"
             android:background="@color/textLight"
             android:scaleType="fitXY"
             android:src="@android:drawable/divider_horizontal_dark"
+            app:layout_constraintTop_toBottomOf="@id/menu_item_earn_coins"
             app:layout_constraintBottom_toTopOf="@+id/menu_item_settings"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

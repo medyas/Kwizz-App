@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/activities_background"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.ProfileSettingsFragment">
+
+    <android.support.constraint.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/picture_settings"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/profile_settings_picture"
+            android:layout_width="300dp"
+            android:layout_height="300dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_image_black_24dp"
+            android:background="@drawable/profile_text_background"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/profile_settings_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_photo_camera_black_24dp"
+            android:padding="8dp"
+            android:background="@drawable/profile_text_background"
+            app:layout_constraintEnd_toEndOf="@+id/profile_settings_picture"
+            app:layout_constraintTop_toTopOf="@+id/profile_settings_picture" />
+
+        <Button
+            android:id="@+id/profile_settings_upload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/image_button_background"
+            android:text="@string/upload"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="@+id/profile_settings_picture"
+            app:layout_constraintStart_toStartOf="@+id/profile_settings_picture"
+            app:layout_constraintTop_toBottomOf="@+id/profile_settings_picture" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/email_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:padding="8dp"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email1InputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/email"
+            android:textColorHint="@color/inputHintColor">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/settings_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/inputBackgroundTint"
+                android:drawableStart="@drawable/ic_email_black_24dp"
+                android:drawablePadding="8dp"
+                android:textColor="@android:color/white"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:drawableLeft="@drawable/ic_email_black_24dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/email2InputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/email"
+            android:textColorHint="@color/inputHintColor">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/settings_email_conf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/inputBackgroundTint"
+                android:drawableStart="@drawable/ic_email_black_24dp"
+                android:drawablePadding="8dp"
+                android:textColor="@android:color/white"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:drawableLeft="@drawable/ic_email_black_24dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/settings_email_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginRight="32dp"
+            android:background="@drawable/image_button_background"
+            android:text="@string/change"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/password_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:visibility="gone"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/password"
+            android:textColorHint="@color/inputHintColor"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/settings_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:drawablePadding="8dp"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/inputBackgroundTint"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_lock_black_24dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/password_confirm_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:hint="@string/pass_confirm"
+            android:textColorHint="@color/inputHintColor"
+            app:errorEnabled="true">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/settings_password_confirm"
+                android:layout_width="match_parent"
+                android:drawableStart="@drawable/ic_lock_black_24dp"
+                android:drawablePadding="8dp"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/inputBackgroundTint"
+                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_lock_black_24dp" />
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/settings_password_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="32dp"
+            android:background="@drawable/image_button_background"
+            android:text="@string/change"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginRight="32dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/notify_settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:textSize="16sp"
+            android:text="Allow Notification"/>
+
+        <Switch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:layout_margin="8dp"
+            android:textSize="16sp"
+            android:text="Allow Notification"/>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/profile_settings_loader"
+        android:visibility="gone"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/upload_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@android:color/white"/>
+</FrameLayout>
