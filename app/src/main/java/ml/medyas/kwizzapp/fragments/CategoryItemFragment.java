@@ -27,6 +27,7 @@ import static ml.medyas.kwizzapp.classes.UtilsClass.imgs;
 public class CategoryItemFragment extends Fragment {
     @BindView(R.id.category_btn) LinearLayout categoryBtn;
     @BindView(R.id.category_btn_title) TextView categoryBtnTitle;
+    @BindView(R.id.category_btn_sub) TextView categoryBtnSubTitle;
     @BindView(R.id.category_img) ImageView categoryImage;
     @BindView(R.id.category_title) TextView categoryTitle;
 
@@ -68,6 +69,7 @@ public class CategoryItemFragment extends Fragment {
 
         if(categories.getStatus().equals("unlocked")) {
             categoryBtnTitle.setText("Start Quiz");
+            categoryBtnSubTitle.setVisibility(View.GONE);
         }
         categoryBtn.setOnClickListener(new View.OnClickListener() {
             @Override

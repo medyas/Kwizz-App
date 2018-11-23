@@ -393,11 +393,15 @@ public class ProfileSettingsFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
+                Toast.makeText(getActivity(), "Unable to Upload picture !", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private int getProgress(long bytesTransferred, long totalByteCount) {
+        if(totalByteCount> 0) {
+            return 0;
+        }
         return (int) ((bytesTransferred*100)/totalByteCount);
     }
 

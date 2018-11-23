@@ -16,6 +16,10 @@ import static ml.medyas.kwizzapp.activities.MainActivity.categoryList;
 public class CategoryAdapter extends FragmentStatePagerAdapter {
     private List<Categories> categories = new ArrayList<>();
 
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
+    }
+
     public CategoryAdapter(FragmentManager fm, List<Categories> categories) {
         super(fm);
         this.categories = categories;

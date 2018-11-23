@@ -1,10 +1,9 @@
 package ml.medyas.kwizzapp;
 
-import android.support.test.espresso.IdlingPolicies;
+
 import android.support.test.espresso.IdlingRegistry;
 import android.support.test.espresso.IdlingResource;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
+import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.text.format.DateUtils;
 
 import org.junit.After;
@@ -16,12 +15,8 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.TimeUnit;
 
 import ml.medyas.kwizzapp.activities.LoginActivity;
+import ml.medyas.kwizzapp.activities.MainActivity;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static android.support.test.espresso.action.ViewActions.typeText;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -32,9 +27,13 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 public class ExampleInstrumentedTest {
 
 
-    @Rule
+    /*@Rule
     public ActivityTestRule<LoginActivity> mActivityRule
-            = new ActivityTestRule<>(LoginActivity.class);
+            = new ActivityTestRule<>(LoginActivity.class);*/
+
+    @Rule
+    public IntentsTestRule<LoginActivity> mActivityRule
+            = new IntentsTestRule<>(LoginActivity.class);
 
 
 
@@ -55,7 +54,7 @@ public class ExampleInstrumentedTest {
 
     @Test
     public void useAppContext() {
-
+/*
         onView(withId(R.id.button_spalsh_create_account)).perform(click());
 
         onView(withId(R.id.register_username)).perform(typeText("medyas"), closeSoftKeyboard());
@@ -64,14 +63,17 @@ public class ExampleInstrumentedTest {
         onView(withId(R.id.register_pass_confirm)).perform(typeText("50532193"), closeSoftKeyboard());
 
         onView(withId(R.id.button_register)).perform(click());
+*/
 
-/*
-        onView(withId(R.id.login_email)).perform(typeText("medyas"), closeSoftKeyboard());
+        onView(withId(R.id.login_email)).perform(typeText("medyassinesabri@gmail.com"), closeSoftKeyboard());
         onView(withId(R.id.login_password)).perform(typeText("50532193"), closeSoftKeyboard());
 
         onView(withId(R.id.button_login)).perform(click());
 
-        intended(hasComponent(MainActivity.class.getName()));*/
+        intended(hasComponent(MainActivity.class.getName()));
+
+        //intended(toPackage("ml.medyas.kwizzapp.activities"));
+
     }
 
     @After

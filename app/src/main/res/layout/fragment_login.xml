@@ -119,36 +119,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_forgot_pass" />
 
-
-    <Button
-        android:id="@+id/button_spalsh_create_account2"
-        style="@style/ButtonStyle"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/right_rounded_btn"
-        android:layout_marginEnd="0dp"
-        android:padding="4dp"
-        android:text="Sign In"
-        app:layout_constraintBottom_toBottomOf="@+id/button_spalsh_create_account"
-        app:layout_constraintEnd_toStartOf="@+id/button_spalsh_create_account"
-        app:layout_constraintTop_toTopOf="@+id/button_spalsh_create_account"
-        android:layout_marginRight="0dp" />
-
-    <Button
-        android:id="@+id/button_spalsh_create_account"
-        style="@style/ButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/left_rounded_btn"
-        android:padding="4dp"
-        android:text="Sign Up"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/button_login"
-        app:layout_constraintHorizontal_bias="0.721"
-        app:layout_constraintStart_toStartOf="@+id/button_login"
-        app:layout_constraintTop_toBottomOf="@+id/button_login"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_login">
+
+        <Button
+            android:id="@+id/button_spalsh_create_account2"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:background="@drawable/left_dark_rounded_btn"
+            android:padding="4dp"
+            android:text="Sign In" />
+
+        <Button
+            android:id="@+id/button_spalsh_create_account"
+            style="@style/ButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="0dp"
+            android:background="@drawable/right_light_rounded_btn"
+            android:padding="4dp"
+            android:text="Sign Up" />
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

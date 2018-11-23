@@ -11,7 +11,7 @@ import dagger.Provides;
 @Module
 public class UserSingleton {
     private static  FirebaseUser user;
-    private static UserCategories userCategories;
+    private static UserCategories userCategories ;
     private static String userDoc;
 
     @Provides

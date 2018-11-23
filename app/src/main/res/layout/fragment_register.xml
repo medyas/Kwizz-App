@@ -159,6 +159,24 @@
         app:layout_constraintTop_toBottomOf="@+id/password_confirm_text_input"
         app:layout_constraintVertical_bias="0.111" />
 
+    <Button
+        android:id="@+id/button_splash_login"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginLeft="0dp"
+        android:background="@drawable/left_light_rounded_btn"
+        android:padding="4dp"
+        android:text="Sign In"
+        app:layout_constraintBottom_toBottomOf="@+id/button_spalsh_create_account2"
+        app:layout_constraintEnd_toStartOf="@+id/button_spalsh_create_account2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/button_spalsh_create_account2" />
 
     <Button
         android:id="@+id/button_spalsh_create_account2"
@@ -166,31 +184,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
+        android:layout_marginStart="0dp"
         android:layout_marginRight="0dp"
-        android:background="@drawable/right_rounded_btn"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/right_dark_rounded_btn"
         android:padding="4dp"
         android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="@+id/button_splash_login"
-        app:layout_constraintEnd_toStartOf="@+id/button_splash_login"
-        app:layout_constraintTop_toTopOf="@+id/button_splash_login"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/button_splash_login"
-        style="@style/ButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="28dp"
-        android:background="@drawable/left_rounded_btn"
-        android:padding="4dp"
-        android:text="Sign In"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/button_register"
-        app:layout_constraintHorizontal_bias="0.717"
-        app:layout_constraintStart_toStartOf="@+id/button_register"
-        app:layout_constraintTop_toBottomOf="@+id/button_register"
-        app:layout_constraintVertical_bias="1.0" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/button_splash_login"
+        app:layout_constraintTop_toBottomOf="@+id/button_register" />
 
 </android.support.constraint.ConstraintLayout>

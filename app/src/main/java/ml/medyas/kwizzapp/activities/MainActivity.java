@@ -3,6 +3,7 @@ package ml.medyas.kwizzapp.activities;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -70,9 +71,12 @@ import static ml.medyas.kwizzapp.classes.UtilsClass.getCategories;
 public class MainActivity extends AppCompatActivity implements QuizFragment.OnFragmentInteractionListener, LeaderBoardFragment.OnFragmentInteractionListener,
         NotificationsFragment.OnFragmentInteractionListener, EarnCoinsFragment.OnFragmentInteractionListener, SettingsFragment.OnSettingsFragmentsInteractions,
         CategoryItemFragment.CategoryItemInterface, ProfileSettingsFragment.OnProfileSettingsFragmentInteractions {
+
     public static final String CATEGORY_POSITION = "categoryPosition";
     public static final String QUESTION_DIFF = "questionDiff";
     public static final String QUESTION_NUM = "questionNum";
+    public static final String ITEM_POSITION = "itemPosition";
+
     @BindView(R.id.drawer_layout) DrawerLayout drawerLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.main_container) FrameLayout container;
@@ -91,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
 
     private final String TAG = getClass().getName();
     public static List<CategoryItemClass> categoryList = new ArrayList<ml.medyas.kwizzapp.classes.CategoryItemClass>();
+    private AlertDialog loadingDialog = null;
+
+    // TODO 1: add score db and score leaderboard & add informative dialog for starting quiz
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             // Check if user's email is verified
             boolean emailVerified = user.isEmailVerified();
             if (!emailVerified) {
-                user.sendEmailVerification()
+                /*user.sendEmailVerification()
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -238,11 +245,11 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
                                 }
                             }
                         });
-
+                */
                 Log.d(TAG, "Email not verified !");
-                FirebaseAuth.getInstance().signOut();
+                /*FirebaseAuth.getInstance().signOut();
                 startActivity(new Intent(this, LoginActivity.class));
-                finishAffinity();
+                finishAffinity();*/
                 Toast.makeText(this, "Please verify you email address!", Toast.LENGTH_SHORT).show();
             }
             if(user.getPhotoUrl() != null && !user.getPhotoUrl().equals("")) {
@@ -279,29 +286,39 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
             showQuizDialog(position);
         } else {
             if(coins.getUserCoins() >= 250) {
+                showLoadingDialog();
                 UserSingleton.getUserCategories().getCategories().get(position).setStatus("unlocked");
-                // implement loading dialog
                 UserCoins u = new UserCoins(user.getUid(), (coins.getUserCoins()-250));
                 mDatabase.setValue(u).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             db.collection("users").document(UserSingleton.getUserDoc())
-                                    .update("categories", UserSingleton.getUserCategories().getCategories())
+                                    .set(UserSingleton.getUserCategories())
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
                                             Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                            //  update quizFrag to notify data changed to the viewpager
+                                            Fragment frag = new QuizFragment();
+                                            Bundle bundle = new Bundle();
+                                            bundle.putInt(ITEM_POSITION, position);
+                                            frag.setArguments(bundle);
+                                            replaceFragment(frag, getString(R.string.quizzes));
+                                            hideLoadingDialog();
                                             showQuizDialog(position);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
+                                            hideLoadingDialog();
+                                            Toast.makeText(MainActivity.this, "Unexpected Error", Toast.LENGTH_SHORT).show();
                                             Log.w(TAG, "Error updating document", e);
                                         }
                                     });
                         } else {
+                            hideLoadingDialog();
                             Toast.makeText(MainActivity.this, "Unexpected Error", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -310,6 +327,25 @@ public class MainActivity extends AppCompatActivity implements QuizFragment.OnFr
                 Toast.makeText(this, "You don\'t have sufficient coins!", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private void showLoadingDialog() {
+        if (loadingDialog == null) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+            LayoutInflater inflater = this.getLayoutInflater();
+            View dialogView = inflater.inflate(R.layout.loading_dialog, null);
+            dialog.setView(dialogView);
+            dialog.setCancelable(false);
+            loadingDialog = dialog.create();
+            loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        }
+
+        loadingDialog.show();
+    }
+
+    private void hideLoadingDialog() {
+        loadingDialog.dismiss();
     }
 
     private void showQuizDialog(final int position) {

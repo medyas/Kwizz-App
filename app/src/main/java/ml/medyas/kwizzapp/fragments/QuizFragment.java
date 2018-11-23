@@ -33,6 +33,7 @@ import ml.medyas.kwizzapp.adapter.CategoryAdapter;
 import ml.medyas.kwizzapp.classes.UserCategories;
 import ml.medyas.kwizzapp.classes.UserSingleton;
 
+import static ml.medyas.kwizzapp.activities.MainActivity.ITEM_POSITION;
 import static ml.medyas.kwizzapp.classes.UtilsClass.dp2px;
 import static ml.medyas.kwizzapp.classes.UtilsClass.getDefaultCategories;
 
@@ -46,8 +47,10 @@ public class QuizFragment extends Fragment {
     private static final float MAX_ROTATION = 30;
 
     private OnFragmentInteractionListener mListener;
+    private CategoryAdapter mAdapter ;
 
     public static final String TAG = "QuizFragment";
+    private int itemPosition = 0;
 
     public QuizFragment() {
         // Required empty public constructor
@@ -62,6 +65,9 @@ public class QuizFragment extends Fragment {
         super.onCreate(savedInstanceState);
         user = UserSingleton.getUser();
         db = FirebaseFirestore.getInstance();
+        if (getArguments() != null) {
+            itemPosition = getArguments().getInt(ITEM_POSITION);
+        }
     }
 
     @Override
@@ -98,7 +104,8 @@ public class QuizFragment extends Fragment {
 
     private void setupViewPager() {
         UserSingleton.setUserCategories(userCategories);
-        viewPager.setAdapter(new CategoryAdapter(getChildFragmentManager(), userCategories.getCategories()));
+        mAdapter = new CategoryAdapter(getChildFragmentManager(), userCategories.getCategories());
+        viewPager.setAdapter(mAdapter);
         viewPager.setClipToPadding(false);
         viewPager.setPageMargin(dp2px(getResources(), 40));
         viewPager.setPadding(48, 8, 48, 8);
@@ -129,6 +136,8 @@ public class QuizFragment extends Fragment {
         });
         viewPager.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+
+        viewPager.setCurrentItem(itemPosition, true);
     }
 
     private void createUserCategories(final String uid) {

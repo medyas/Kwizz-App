@@ -1,6 +1,7 @@
 package ml.medyas.kwizzapp.activities;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,14 +13,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -187,10 +192,26 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
             @Override
             public void onClick(View view) {
                 startQuiz.setVisibility(View.GONE);
+                showAkDialog();
+            }
+        });
+    }
+
+    private void showAkDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        dialogBuilder.setCancelable(false);
+        dialogBuilder.setTitle("Starting Quiz");
+        TextView txt = new TextView(this);
+        txt.setText("By selecting an answer, the question will be processed!");
+        dialogBuilder.setView(txt);
+        dialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
                 container.setVisibility(View.VISIBLE);
                 replaceFragment();
             }
         });
+        dialogBuilder.create().show();
     }
 
     @Override
@@ -279,13 +300,60 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
                 if(questionPosition < questionsList.size()) {
                     replaceFragment();
                 } else {
+                    // implment dialog for displsying the status  correct/missed questions
                     Toast.makeText(QuizzesActivity.this, "Completed the Quiz", Toast.LENGTH_SHORT).show();
                     updateUserCoins();
-                    onBackPressed();
+                    showCelebrationDialog();
+                    handler.removeCallbacksAndMessages(this);
                 }
             }
         }, 2000);
 
+    }
+
+    private void showCelebrationDialog() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setCancelable(false);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.celebration_dialog, null);
+        alertDialog.setView(dialogView);
+
+        ImageView img = dialogView.findViewById(R.id.celeb_background);
+        Glide.with(this)
+                .asGif()
+                .load(R.raw.celeb_background)
+                .into(img);
+        TextView celebScore = dialogView.findViewById(R.id.celeb_score);
+        TextView celebTitle = dialogView.findViewById(R.id.celeb_title);
+        TextView celebText = dialogView.findViewById(R.id.celeb_text);
+        celebScore.setText(String.format("%d/%d", coinsCount, questionsList.size()));
+        celebTitle.setText(determineTitle());
+        celebText.setText(String.format("You got %d out of %d questions", coinsCount, questionsList.size()));
+
+        Button celebButton = dialogView.findViewById(R.id.celeb_btn);
+        celebButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        alertDialog.setCancelable(false);
+        AlertDialog dialog = alertDialog.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+    }
+
+    private String determineTitle() {
+        int size = questionsList.size();
+        if(size == coinsCount) {
+            return "Congratulations";
+        } else if(coinsCount <= (size/2)) {
+            return "Too bad";
+        } else {
+            return "Nice Job";
+        }
     }
 
     private void updateUserCoins() {
