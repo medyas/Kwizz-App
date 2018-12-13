@@ -20,6 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@android:color/transparent"
             app:navigationIcon="@drawable/ic_noun_menu_220342"
+            app:layout_scrollFlags="scroll|snap"
             app:titleTextColor="@android:color/white"
             app:elevation="0dp">
 

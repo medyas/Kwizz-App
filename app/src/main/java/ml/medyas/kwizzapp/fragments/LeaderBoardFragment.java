@@ -4,13 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ml.medyas.kwizzapp.R;
+import ml.medyas.kwizzapp.adapter.LeaderBoardAdapter;
+import ml.medyas.kwizzapp.classes.UserLeaderBoardClass;
+
+import static ml.medyas.kwizzapp.classes.UtilsClass.calculateNoOfColumns;
+import static ml.medyas.kwizzapp.classes.UtilsClass.getLeaderBoardList;
 
 public class LeaderBoardFragment extends Fragment {
+    @BindView(R.id.leader_board_recyclerview) RecyclerView mRecyclerView;
+
+    private LeaderBoardAdapter mAdapter;
+    private List<UserLeaderBoardClass> list = new ArrayList<>();
 
     private OnFragmentInteractionListener mListener;
 
@@ -28,7 +44,31 @@ public class LeaderBoardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_leader_board, container, false);
+        View root = inflater.inflate(R.layout.fragment_leader_board, container, false);
+        ButterKnife.bind(this, root);
+
+        list = getLeaderBoardList();
+
+        GridLayoutManager layout = new GridLayoutManager(getContext(), calculateNoOfColumns(getActivity().getApplicationContext()));
+        layout.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int i) {
+                if( mAdapter.getItemViewType(i) == 0) {
+                    return calculateNoOfColumns(getActivity().getApplicationContext());
+                } else {
+                    return 1;
+                }
+            }
+        });
+
+        mRecyclerView.setLayoutManager(layout);
+        mAdapter = new LeaderBoardAdapter(list, getContext());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        mAdapter.notifyDataSetChanged();
+
+        return root;
     }
 
     @Override

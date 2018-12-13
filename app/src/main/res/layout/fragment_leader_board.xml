@@ -5,10 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".fragments.LeaderBoardFragment">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/leader_board_recyclerview"
+        android:foregroundGravity="center"
+        android:layout_gravity="center_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="leaderboard app"
-        android:textColor="@android:color/white" />
+        android:layout_height="wrap_content"/>
 
 </FrameLayout>
