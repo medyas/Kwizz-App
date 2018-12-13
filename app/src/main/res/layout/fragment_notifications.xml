@@ -5,10 +5,6 @@
     android:layout_height="match_parent"
     tools:context=".fragments.NotificationsFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="notify app"
-        android:textColor="@android:color/white"/>
+
 
 </FrameLayout>

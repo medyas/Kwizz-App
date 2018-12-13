@@ -62,6 +62,7 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
     @BindView(R.id.content_failed) LinearLayout failedLayout;
     @BindView(R.id.content_loading) LinearLayout loadingLayout;
     @BindView(R.id.content_start) Button startQuiz;
+    @BindView(R.id.content_text) TextView infoText;
 
     private int questionPosition = 0;
     private List<QuestionClass> questionsList = new ArrayList<QuestionClass>();
@@ -192,6 +193,7 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
             @Override
             public void onClick(View view) {
                 startQuiz.setVisibility(View.GONE);
+                infoText.setVisibility(View.GONE);
                 showAkDialog();
             }
         });
@@ -203,6 +205,7 @@ public class QuizzesActivity extends AppCompatActivity implements QuizQuestionFr
         dialogBuilder.setTitle("Starting Quiz");
         TextView txt = new TextView(this);
         txt.setText("By selecting an answer, the question will be processed!");
+        txt.setPadding(16, 32, 16, 16);
         dialogBuilder.setView(txt);
         dialogBuilder.setPositiveButton("Okay", new DialogInterface.OnClickListener() {
             @Override

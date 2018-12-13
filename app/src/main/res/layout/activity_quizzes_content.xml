@@ -75,4 +75,13 @@
         android:layout_marginLeft="@dimen/quiz_question_bottombar_width"
         android:layout_marginStart="@dimen/quiz_question_bottombar_width" />
 
+    <TextView
+        android:id="@+id/content_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="16dp"
+        android:text="* By tapping on an answer the question will be submitted."
+        android:textColor="@color/inputHintColor"/>
+
 </FrameLayout>
