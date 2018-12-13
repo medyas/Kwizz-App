@@ -12,34 +12,34 @@ Also, the app uses Butterknife to bind all the views.
 
 ## Screenshots
 
-** Sign  in interface  **  
+**Sign  in interface**  
 <img src="screenshots/Screenshot_1.png" width="360"> 
 
-** Sign up interface **  
+**Sign up interface**  
 <img src="screenshots/Screenshot_2.png" width="360">  
 
-** Dashboard displaying a list of categories **  
+** Dashboard displaying a list of categories**  
 <img src="screenshots/Screenshot_3.png" width="360">  
 
-** locked Quiz category that require paying coins to unlock**  
+**locked Quiz category that require paying coins to unlock**  
 <img src="screenshots/Screenshot_10.png" width="360">
 
-** Navigation menu **  
+**Navigation menu**  
 <img src="screenshots/Screenshot_4.png" width="360">  
 
-** LeaderBoard List **  
+** LeaderBoard List**  
 <img src="screenshots/Screenshot_5.png" width="360">  
 
-** Settings interface **  
+**Settings interface**  
 <img src="screenshots/Screenshot_6.png" width="360">  
 
-** Selecting number of question and difficulty **  
+**Selecting number of question and difficulty**  
 <img src="screenshots/Screenshot_7.png" width="360">  
 
-** Quiz question with the choices and timer **  
+** Quiz question with the choices and timer**  
 <img src="screenshots/Screenshot_8.png" width="360">  
 
-** Congrats interface after finishing all the questions**  
+**Congrats interface after finishing all the questions**  
 <img src="screenshots/Screenshot_11.png" width="360">    
 
 
